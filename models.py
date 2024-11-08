@@ -1,9 +1,10 @@
-from typing import Optional
+from sqlalchemy import Column, Integer, String
 
-import pydantic
+from db.engine import BaseClass
 
 
-class City(pydantic.BaseModel):
-    id: int
-    name: str
-    additional_info: Optional[str] = None
+class DBCity(BaseClass):
+    __tablename__ = "cities"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String(50))
+    additional_info = Column(String(500), nullable=True)
