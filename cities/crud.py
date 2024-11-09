@@ -1,7 +1,6 @@
 from sqlalchemy.orm import Session
 
-import models
-import schemas
+from cities import models, schemas
 
 
 def get_all_cities(db: Session):

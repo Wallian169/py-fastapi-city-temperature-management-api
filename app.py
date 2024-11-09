@@ -2,9 +2,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi import Depends
 from sqlalchemy.orm import Session
 
-import crud
-import schemas
-from crud import delete_city_from_db
+from cities import crud, schemas
 from db.engine import SessionLocal
 
 app = FastAPI()
@@ -48,7 +46,7 @@ def update_city(city_id: int, city_info: schemas.CityUpdate, db=Depends(get_db))
 
 @app.delete("/cities/{city_id}")
 def delete_city(city_id: int, db=Depends(get_db)):
-    deleted_city = delete_city_from_db(db=db, city_id=city_id)
+    deleted_city = crud.delete_city_from_db(db=db, city_id=city_id)
     if not deleted_city:
         raise HTTPException(status_code=404, detail="City not found")
 
