@@ -12,8 +12,12 @@ class CityCreate(CityBase):
     pass
 
 
-class CityUpdate(CityBase):
+class City(CityBase):
     id: int
 
     class Config:
         orm_mode = True
+
+
+class CityUpdate(pydantic.BaseModel):
+    additional_info: Optional[str] = None
