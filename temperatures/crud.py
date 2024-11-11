@@ -2,7 +2,7 @@ import os
 from datetime import datetime
 from typing import Callable
 
-import requests
+import httpx
 
 from sqlalchemy.orm import Session
 from dotenv import load_dotenv
@@ -10,25 +10,22 @@ from dotenv import load_dotenv
 from cities.crud import get_all_cities
 from temperatures import models
 
-load_dotenv("../.env")
+load_dotenv()
 
 API_URL = "http://api.weatherapi.com/v1/current.json"
 KEY = os.getenv("API_KEY")
 
 
-def get_temperature_from_api(name: str) -> float | None:
+async def get_temperature_from_api(name: str) -> float | None:
     params = {
-        "key": "47a3629b3beb44a48dc134140241409",
+        "key": KEY,
         "q": name
     }
-    response = requests.get(API_URL, params=params)
-    data = response.json()
-
-    if response.status_code == 200:
+    async with httpx.AsyncClient() as client:
+        response = await client.get(API_URL, params=params)
+        response.raise_for_status()
+        data = response.json()
         return data["current"]["temp_c"]
-    else:
-        print(data.get("error", {}).get("message", "Unknown error"))
-        return None
 
 def timer(func: Callable) -> Callable:
     def inner(*args, **kwargs):
@@ -40,12 +37,12 @@ def timer(func: Callable) -> Callable:
     return inner
 
 @timer
-def create_temperatures_record(db: Session):
+async def create_temperatures_record(db: Session):
     cities = get_all_cities(db)
     counter = 0
 
     for city in cities:
-        temperature = get_temperature_from_api(city.name)
+        temperature = await get_temperature_from_api(city.name)
         if temperature:
             record = models.Temperature(
                 city_id=city.id,

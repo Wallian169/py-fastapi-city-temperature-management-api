@@ -10,8 +10,8 @@ router = APIRouter()
 
 @router.post("/temperatures/")
 def update_temperatures(db: Session = Depends(get_db)):
-    message = crud.create_temperatures_record(db)
-    return {"message": message}
+    crud.create_temperatures_record(db)
+    return {"message": "complete"}
 
 
 @router.get("/temperatures/", response_model=list[schemas.Temperature])
