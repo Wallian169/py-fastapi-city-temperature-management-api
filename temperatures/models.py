@@ -1,4 +1,11 @@
-from sqlalchemy import Column, Integer, ForeignKey, DateTime, Float, CheckConstraint
+from sqlalchemy import (
+    Column,
+    Integer,
+    ForeignKey,
+    DateTime,
+    Float,
+    CheckConstraint
+)
 from sqlalchemy.orm import relationship
 
 from cities.models import DBCity

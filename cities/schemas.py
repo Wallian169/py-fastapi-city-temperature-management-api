@@ -26,4 +26,3 @@ class CityUpdate(pydantic.BaseModel):
 
 class Message(pydantic.BaseModel):
     message: str
-

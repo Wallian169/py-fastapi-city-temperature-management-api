@@ -8,10 +8,12 @@ from temperatures import schemas
 
 router = APIRouter()
 
+
 @router.post("/temperatures/", response_model=list[schemas.Temperature])
 async def create_temperatures(db: AsyncSession = Depends(get_db)):
     result = await crud.create_temperatures_record(db)
     return result
+
 
 @router.get("/temperatures/")
 async def get_temperatures(

@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.ext.asyncio import AsyncSession
 
 from cities import crud, schemas
 
@@ -26,12 +25,18 @@ async def create_city(city: schemas.CityCreate, db=Depends(get_db)):
     result = await crud.create_city(db, city)
     return result
 
+
 @router.put("/cities/{city_id}", response_model=schemas.City)
-async def update_city_info(city_id: int, city: schemas.CityUpdate, db=Depends(get_db)):
+async def update_city_info(
+        city_id: int,
+        city: schemas.CityUpdate,
+        db=Depends(get_db)
+):
     result = await crud.update_city_info(db=db, city=city, city_id=city_id)
     if not result:
         raise HTTPException(status_code=404, detail="City not found")
     return result
+
 
 @router.delete("/cities/{city_id}")
 async def delete_city(city_id: int, db=Depends(get_db)):

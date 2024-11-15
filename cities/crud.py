@@ -11,11 +11,13 @@ async def get_all_cities(db: AsyncSession):
     cities_list = await db.execute(query)
     return [city[0] for city in cities_list.fetchall()]
 
+
 async def get_city_by_id(db: AsyncSession, city_id: int):
     query = select(models.DBCity).filter(models.DBCity.id == city_id)
     result = await db.execute(query)
     db_city = result.scalar_one_or_none()
     return db_city
+
 
 async def create_city(db: AsyncSession, city: schemas.CityCreate):
     query = insert(models.DBCity).values(

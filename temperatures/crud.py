@@ -1,6 +1,5 @@
 import os
 from datetime import datetime
-from typing import Callable
 
 import httpx
 from dotenv import load_dotenv
@@ -9,7 +8,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from cities import crud
 from temperatures import models, schemas
-from temperatures.schemas import Temperature
 
 load_dotenv()
 
@@ -32,7 +30,10 @@ async def get_temperature_from_api(name: str) -> float | None:
             print(f"An error occurred while requesting data: {e}")
             return None
 
-async def create_temperatures_record(db: AsyncSession) -> list[models.Temperature]:
+
+async def create_temperatures_record(
+        db: AsyncSession
+) -> list[models.Temperature]:
     cities = await crud.get_all_cities(db)
     temperature_records = []
     for city in cities:
@@ -46,7 +47,9 @@ async def create_temperatures_record(db: AsyncSession) -> list[models.Temperatur
             temperature_records.append(temperature_record)
 
     if temperature_records:
-        statement = insert(models.Temperature).values(temperature_records).returning(
+        statement = insert(models.Temperature).values(
+            temperature_records
+        ).returning(
             models.Temperature.id,
             models.Temperature.city_id,
             models.Temperature.temperature,
@@ -55,7 +58,10 @@ async def create_temperatures_record(db: AsyncSession) -> list[models.Temperatur
         result = await db.execute(statement)
         await db.commit()
         inserted_records = result.fetchall()
-        return [schemas.Temperature.model_validate(record) for record in inserted_records]
+        return [
+            schemas.Temperature.model_validate(record)
+            for record in inserted_records
+        ]
 
 
 async def get_temperatures_records(

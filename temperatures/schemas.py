@@ -8,6 +8,7 @@ class TemperatureBase(pydantic.BaseModel):
     date_time: datetime
     temperature: float
 
+
 class Temperature(TemperatureBase):
     id: int
 
