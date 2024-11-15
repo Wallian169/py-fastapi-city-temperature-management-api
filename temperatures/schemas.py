@@ -10,3 +10,6 @@ class TemperatureBase(pydantic.BaseModel):
 
 class Temperature(TemperatureBase):
     id: int
+
+    class Config:
+        from_attributes = True

@@ -20,4 +20,10 @@ class City(CityBase):
 
 
 class CityUpdate(pydantic.BaseModel):
+    name: Optional[str] = None
     additional_info: Optional[str] = None
+
+
+class Message(pydantic.BaseModel):
+    message: str
+

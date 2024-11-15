@@ -2,7 +2,6 @@ from fastapi import FastAPI
 from cities.router import router as cities_router
 from temperatures.router import router as temperatures_router
 
-import cities
 
 app = FastAPI()
 
